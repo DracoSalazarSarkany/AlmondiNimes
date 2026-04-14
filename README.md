@@ -172,4 +172,4 @@ AlmondiNimes/
     - Implementar sistema de chat o comentarios en obras.
 
 ---
-© 2024 AlmondiNimes Dev Team
+© 2026 Lucas Ruiz
