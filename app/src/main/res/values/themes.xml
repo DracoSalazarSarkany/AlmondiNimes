@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.AlmondiNimes" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+
+    <style name="CustomDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">#1E1E1E</item>
+        <item name="colorAccent">#448AFF</item>
+    </style>
+
+    <style name="Theme.AlmondiNimes" parent="Base.Theme.AlmondiNimes" />
+
+    <style name="Theme.Splash.Brutal" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">#121212</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

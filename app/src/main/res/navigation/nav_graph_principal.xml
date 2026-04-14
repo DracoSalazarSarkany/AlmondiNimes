@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_principal"
+    app:startDestination="@id/nav_novedades">
+
+    <fragment
+        android:id="@+id/nav_novedades"
+        android:name="com.example.almondinimes.fragments.Fragment_Novedades"
+        android:label="Noticias"
+        tools:layout="@layout/fragment_novedades" />
+
+    <fragment
+        android:id="@+id/nav_anime"
+        android:name="com.example.almondinimes.fragments.Fragment_Anime"
+        android:label="Anime"
+        tools:layout="@layout/fragment_anime">
+        <action
+            android:id="@+id/action_anime_to_detalle"
+            app:destination="@id/detalleObraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_manga"
+        android:name="com.example.almondinimes.fragments.Fragment_Manga"
+        android:label="Manga"
+        tools:layout="@layout/fragment_manga">
+        <action
+            android:id="@+id/action_manga_to_detalle"
+            app:destination="@id/detalleObraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_comunidad"
+        android:name="com.example.almondinimes.fragments.Fragment_Comunidad"
+        android:label="Comunidad"
+        tools:layout="@layout/fragment_comunidad" />
+
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="com.example.almondinimes.fragments.Fragment_Perfil"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_perfil">
+        <action
+            android:id="@+id/action_perfil_to_editar"
+            app:destination="@id/editarPerfilFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_tus_animes"
+        android:name="com.example.almondinimes.fragments.Fragment_MisListas"
+        android:label="Tus Animes"
+        tools:layout="@layout/layout_lista_obras_usuario">
+        <argument
+            android:name="tipo"
+            android:defaultValue="ANIME"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_tus_mangas"
+        android:name="com.example.almondinimes.fragments.Fragment_MisListas"
+        android:label="Tus Mangas"
+        tools:layout="@layout/layout_lista_obras_usuario">
+        <argument
+            android:name="tipo"
+            android:defaultValue="MANGA"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_amigos"
+        android:name="com.example.almondinimes.fragments.Fragment_Amigos"
+        android:label="Amigos"
+        tools:layout="@layout/fragment_amigos">
+        <action
+            android:id="@+id/action_amigos_to_perfilAmigo"
+            app:destination="@id/perfilAmigoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_advertencias"
+        android:name="com.example.almondinimes.fragments.Fragment_Advertencias"
+        android:label="Advertencias"
+        tools:layout="@layout/fragment_advertencias" />
+
+    <fragment
+        android:id="@+id/nav_faq"
+        android:name="com.example.almondinimes.fragments.Fragment_FAQ"
+        android:label="FAQ"
+        tools:layout="@layout/fragment_f_a_q" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.example.almondinimes.fragments.Fragment_AboutUs"
+        android:label="Sobre nosotros"
+        tools:layout="@layout/fragment_about_us" />
+
+    <fragment
+        android:id="@+id/nav_ayuda"
+        android:name="com.example.almondinimes.fragments.Fragment_Ayuda"
+        android:label="Ayuda"
+        tools:layout="@layout/fragment_ayuda" />
+
+    <fragment
+        android:id="@+id/detalleObraFragment"
+        android:name="com.example.almondinimes.fragments.Fragment_Detalle_Obra"
+        android:label="Detalle"
+        tools:layout="@layout/fragment_detalle_obra" />
+
+    <fragment
+        android:id="@+id/perfilAmigoFragment"
+        android:name="com.example.almondinimes.fragments.Fragment_Perfil_Amigo"
+        android:label="Perfil Amigo"
+        tools:layout="@layout/fragment_perfil_amigo">
+        <action
+            android:id="@+id/action_perfilAmigo_to_listaAmigo"
+            app:destination="@id/listaAmigoFragment" />
+        <action
+            android:id="@+id/action_perfilAmigo_to_amigosDeAmigo"
+            app:destination="@id/amigosDeAmigoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listaAmigoFragment"
+        android:name="com.example.almondinimes.fragments.Fragment_Lista_Amigo"
+        android:label="Lista Amigo"
+        tools:layout="@layout/fragment_friend_item_list">
+        <action
+            android:id="@+id/action_listaAmigo_to_detalleObra"
+            app:destination="@id/detalleObraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/amigosDeAmigoFragment"
+        android:name="com.example.almondinimes.fragments.Fragment_Amigos_De_Amigo"
+        android:label="Amigos de Amigo"
+        tools:layout="@layout/fragment_amigos" />
+
+    <fragment
+        android:id="@+id/editarPerfilFragment"
+        android:name="com.example.almondinimes.fragments.Fragment_Editar_Perfil"
+        android:label="Editar Perfil"
+        tools:layout="@layout/fragment_editar_perfil" />
+
+</navigation>

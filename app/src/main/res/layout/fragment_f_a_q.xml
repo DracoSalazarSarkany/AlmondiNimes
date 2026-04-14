@@ -1,0 +1,125 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preguntas Frecuentes (FAQ)"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#333333" />
+
+        <!-- Pregunta 1: Añadir contenido -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="¿Cómo añado un Anime o Manga a mi lista?"
+            android:textColor="#448AFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:text="Ve a las secciones 'Tus Animes' o 'Tus Mangas' desde el menú lateral y pulsa el botón flotante (+). Escribe el nombre de la obra (mínimo 3 letras) y espera a que aparezca 'Encontrado'. Luego selecciona tu puntuación y estado, y pulsa Guardar."
+            android:textColor="#CCCCCC"
+            android:textSize="14sp" />
+
+        <!-- Pregunta 2: Edición y Borrado -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="¿Cómo edito o elimino una obra de mi lista?"
+            android:textColor="#448AFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:text="En tus listas personales ('Tus Animes' o 'Tus Mangas'), simplemente pulsa sobre cualquier elemento de la lista. Se abrirá un panel donde podrás actualizar tu progreso (Viendo, Completado, etc.), cambiar la nota o eliminar la obra permanentemente."
+            android:textColor="#CCCCCC"
+            android:textSize="14sp" />
+
+        <!-- Pregunta 3: Amigos -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="¿Cómo busco y agrego a mis amigos?"
+            android:textColor="#448AFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:text="Entra en la sección 'Amigos'. Usa la barra de búsqueda superior para introducir el Nick o el ID numérico de tu amigo (ejemplo: Goku#09000). Una vez lo encuentres, pulsa el botón 'Agregar'. Ahora aparecerá en tu lista principal de amigos."
+            android:textColor="#CCCCCC"
+            android:textSize="14sp" />
+
+        <!-- Pregunta 4: Detalles -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="¿Por qué la información tarda un segundo en cargar?"
+            android:textColor="#448AFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:text="AlmondiNimes utiliza la API oficial de MyAnimeList (Jikan) para ofrecerte datos actualizados. Cuando entras en el detalle de una obra, la app consulta la sinopsis y géneros en tiempo real para asegurarte de que ves la información más reciente."
+            android:textColor="#CCCCCC"
+            android:textSize="14sp" />
+
+        <!-- Pregunta 5: Comunidad -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="¿Qué puedo hacer en la sección Comunidad?"
+            android:textColor="#448AFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="4dp"
+            android:text="Próximamente podrás ver las actividades recientes de todos los usuarios de AlmondiNimes, descubrir qué es tendencia y compartir tus propias actualizaciones de estado con el resto de la comunidad."
+            android:textColor="#CCCCCC"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
+    </LinearLayout>
+</ScrollView>

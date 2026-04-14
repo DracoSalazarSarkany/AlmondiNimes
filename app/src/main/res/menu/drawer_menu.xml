@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_perfil"
+            android:title="Perfil" />
+        <item
+            android:id="@+id/nav_tus_animes"
+            android:title="Tus Animes" />
+        <item
+            android:id="@+id/nav_tus_mangas"
+            android:title="Tus Mangas" />
+        <item
+            android:id="@+id/nav_amigos"
+            android:title="Amigos" />
+    </group>
+
+    <item android:title="Información">
+        <menu>
+            <item
+                android:id="@+id/nav_advertencias"
+                android:title="Advertencias" />
+            <item
+                android:id="@+id/nav_faq"
+                android:title="FAQ" />
+            <item
+                android:id="@+id/nav_about"
+                android:title="Sobre nosotros" />
+        </menu>
+    </item>
+
+    <group android:id="@+id/group_exit">
+        <item
+            android:id="@+id/nav_ayuda"
+            android:title="Ayuda" />
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Cerrar sesión" />
+    </group>
+</menu>

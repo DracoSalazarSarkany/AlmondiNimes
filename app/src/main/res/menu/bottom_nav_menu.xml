@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/nav_anime"
+        android:icon="@drawable/ic_anime"
+        android:title="Anime" />
+    <item
+        android:id="@+id/nav_manga"
+        android:icon="@drawable/ic_manga"
+        android:title="Manga" />
+    <item
+        android:id="@+id/nav_novedades"
+        android:icon="@android:color/transparent"
+        android:title="" />
+    <item
+        android:id="@+id/nav_comunidad"
+        android:icon="@drawable/ic_comunidad"
+        android:title="Comunidad" />
+    <item
+        android:id="@+id/nav_amigos"
+        android:icon="@drawable/ic_person"
+        android:title="Amigos" />
+</menu>

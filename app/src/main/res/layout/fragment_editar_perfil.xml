@@ -1,0 +1,173 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <FrameLayout
+            android:id="@+id/fl_edit_photo_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:cardBackgroundColor="#1A1A1A"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/iv_edit_profile_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_report_image" />
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/ic_menu_vector"
+                android:backgroundTint="#448AFF"
+                android:padding="6dp"
+                android:src="@android:drawable/ic_menu_camera"
+                app:tint="#FFFFFF" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_edit_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Nombre/Nick"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fl_edit_photo_container" />
+
+        <EditText
+            android:id="@+id/et_edit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Escribe tu nuevo nick..."
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/tv_edit_name_label" />
+
+        <TextView
+            android:id="@+id/tv_edit_email_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Correo"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_edit_name" />
+
+        <EditText
+            android:id="@+id/et_edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Escribe tu correo"
+            android:inputType="textEmailAddress"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/tv_edit_email_label" />
+
+        <EditText
+            android:id="@+id/et_edit_email_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Repite tu correo"
+            android:inputType="textEmailAddress"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/et_edit_email" />
+
+        <TextView
+            android:id="@+id/tv_edit_pass_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Contraseña"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_edit_email_repeat" />
+
+        <EditText
+            android:id="@+id/et_edit_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nueva contraseña"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/tv_edit_pass_label" />
+
+        <EditText
+            android:id="@+id/et_edit_password_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Repite contraseña"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/et_edit_password" />
+
+        <TextView
+            android:id="@+id/tv_edit_birth_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Fecha de nacimiento"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_edit_password_repeat" />
+
+        <LinearLayout
+            android:id="@+id/ll_edit_birth_spinners"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/tv_edit_birth_label">
+
+            <Spinner android:id="@+id/sp_edit_day" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:backgroundTint="#FFFFFF" />
+            <Spinner android:id="@+id/sp_edit_month" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.5" android:backgroundTint="#FFFFFF" />
+            <Spinner android:id="@+id/sp_edit_year" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:backgroundTint="#FFFFFF" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_save_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Aceptar"
+            android:backgroundTint="#448AFF"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/ll_edit_birth_spinners" />
+
+        <Button
+            android:id="@+id/btn_cancel_edit"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Volver"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/btn_save_profile" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
