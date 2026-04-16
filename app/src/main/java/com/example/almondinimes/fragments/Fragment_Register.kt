@@ -6,9 +6,12 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.almondinimes.R
+import com.example.almondinimes.data.AuthManager
 import java.util.*
 
 class Fragment_Register : Fragment(R.layout.fragment_register) {
+
+    private val authManager = AuthManager()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,25 +62,16 @@ class Fragment_Register : Fragment(R.layout.fragment_register) {
 
             val age = calculateAge(day, month, year)
 
-            // --- FUTURA BASE DE DATOS ---
-            // --- LÓGICA DE PERSISTENCIA (COMENTADA PARA EL FUTURO) ---
-            /*
-            val userData = hashMapOf(
-                "username" to user,
-                "email" to email,
-                "age" to age,
-                "password" to pass, // Nota: En el futuro, usa un Hash para la pass, nunca texto plano
-                "isAdult" to (age >= 18)
-            )
-
-            // Ejemplo Firebase:
-            // db.collection("usuarios").add(userData).addOnSuccessListener { ... }
-            */
-            // val isAdult = age >= 18
-            // ----------------------------
-
-            Toast.makeText(requireContext(), "Registro exitoso. Edad: $age años", Toast.LENGTH_LONG).show()
-            findNavController().popBackStack()
+            // Llamada a Firebase para registrar
+            authManager.register(email, pass, user, age) { success, error ->
+                if (success) {
+                    authManager.logout() // Cerramos la sesión automática tras el registro
+                    Toast.makeText(requireContext(), "Registro exitoso. Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show()
+                    findNavController().popBackStack() // Vuelve al Login
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${error ?: "No se pudo registrar"}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 

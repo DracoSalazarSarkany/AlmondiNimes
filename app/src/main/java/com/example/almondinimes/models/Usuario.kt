@@ -1,10 +1,13 @@
 package com.example.almondinimes.models
 
 data class Usuario(
-    val nick: String,
-    val idNumerico: Int,
+    val uid: String = "",
+    val nick: String = "",
+    val email: String = "",
+    val idNumerico: Int = 0,
     val fotoUrl: String? = null,
-    var isSelected: Boolean = false // Útil para el diálogo de añadir
+    val age: Int = 0,
+    var isSelected: Boolean = false
 ) {
     // Propiedad para obtener el formato Nick#00001 automáticamente
     val fullId: String get() = String.format("%s#%05d", nick, idNumerico)

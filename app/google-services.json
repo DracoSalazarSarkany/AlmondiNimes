@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "815139396923",
+    "project_id": "almondinimes-f1642",
+    "storage_bucket": "almondinimes-f1642.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815139396923:android:a63ed3f5511751fa73eb1e",
+        "android_client_info": {
+          "package_name": "com.example.almondinimes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWqyqRG2d8u-LPdoXZfbB0x36306sEbcI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

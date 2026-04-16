@@ -94,6 +94,9 @@ class MainActivity_Principal : AppCompatActivity() {
     }
 
     private fun cerrarSesion() {
+        // Logout real de Firebase
+        com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
+
         // Al cerrar sesión, desactivamos el "Recordar contraseña" para que no entre solo la próxima vez
         val sharedPref = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
