@@ -78,12 +78,19 @@ class Fragment_Amigos : Fragment(R.layout.fragment_amigos) {
         val adapterBusqueda = BusquedaAmigosAdapter(emptyList())
         rvResults.adapter = adapterBusqueda
 
-        // Escuchamos mientras el usuario escribe para filtrar en tiempo real
+        // Observamos los resultados de la búsqueda en el ViewModel
+        viewModel.resultadosBusqueda.observe(viewLifecycleOwner) { resultados ->
+            adapterBusqueda.updateData(resultados)
+        }
+
+        // Escuchamos mientras el usuario escribe
         etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val resultados = viewModel.buscarUsuarios(s.toString())
-                adapterBusqueda.updateData(resultados)
+                val query = s.toString().trim()
+                if (query.contains("#")) {
+                    viewModel.buscarUsuarioPorTag(query)
+                }
             }
             override fun afterTextChanged(s: Editable?) {}
         })

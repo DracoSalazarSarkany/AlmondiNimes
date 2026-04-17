@@ -25,25 +25,31 @@ class Fragment_Amigos_De_Amigo : Fragment(R.layout.fragment_amigos) {
         // Reutilizamos el layout de amigos pero quitamos el FAB (porque no es nuestra lista)
         view.findViewById<View>(R.id.fab_add_friend).visibility = View.GONE
         
-        // Cambiamos el título si existiera (opcional, el layout actual no tiene título arriba)
-        
         val rvAmigos = view.findViewById<RecyclerView>(R.id.rv_amigos)
         val layoutEmpty = view.findViewById<View>(R.id.layout_empty)
-
-        val listaAmigos = viewModel.getAmigosDeUsuario(idUsuario)
+        val tvEmptyDesc = view.findViewById<TextView>(R.id.tv_empty_desc)
         
-        val adapter = AmigosAdapter(listaAmigos) { amigo ->
+        tvEmptyDesc.text = "$nick aún no tiene amigos añadidos."
+
+        // 1. Configurar el adaptador con una lista vacía inicial
+        val adapter = AmigosAdapter(emptyList()) { amigo ->
             val bundle = Bundle().apply {
                 putString("nick", amigo.nick)
                 putInt("idNum", amigo.idNumerico)
             }
-            // Podemos seguir navegando recursivamente a otros perfiles
             findNavController().navigate(R.id.perfilAmigoFragment, bundle)
         }
 
         rvAmigos.layoutManager = LinearLayoutManager(requireContext())
         rvAmigos.adapter = adapter
 
-        layoutEmpty.visibility = if (listaAmigos.isEmpty()) View.VISIBLE else View.GONE
+        // 2. Observar el LiveData de amigos del otro usuario
+        viewModel.amigosDeOtro.observe(viewLifecycleOwner) { listaAmigos ->
+            adapter.updateData(listaAmigos)
+            layoutEmpty.visibility = if (listaAmigos.isEmpty()) View.VISIBLE else View.GONE
+        }
+
+        // 3. Cargar los datos desde Firestore
+        viewModel.cargarAmigosDeOtro(nick, idUsuario)
     }
 }

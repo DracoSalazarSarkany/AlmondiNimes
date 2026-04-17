@@ -32,7 +32,15 @@ class Fragment_MisListas : Fragment(R.layout.layout_lista_obras_usuario) {
         val etSearch = view.findViewById<EditText>(R.id.et_search_my_obra)
         val spSort = view.findViewById<Spinner>(R.id.sp_sort_my_obra)
 
-        etSearch.hint = if (tipoObra == "ANIME") "Buscar en mis animes..." else "Buscar en mis mangas..."
+        // Configurar el texto del estado vacío
+        val emptyDesc = view.findViewById<TextView>(R.id.tv_empty_desc)
+        if (tipoObra == "ANIME") {
+            etSearch.hint = "Buscar en mis animes..."
+            emptyDesc.text = "¡Aún no tienes animes en tu lista! Empieza a añadir algunos."
+        } else {
+            etSearch.hint = "Buscar en mis mangas..."
+            emptyDesc.text = "¡Aún no tienes mangas en tu lista! Empieza a añadir algunos."
+        }
 
         adapter = MyObrasAdapter(emptyList()) { obra ->
             mostrarDialogoEditarItem(obra)

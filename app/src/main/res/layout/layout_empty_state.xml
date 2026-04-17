@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Pulsa el botón '+' para empezar a añadir contenido a tu lista."
+        android:text="Aún no has añadido ninguna obra a la lista."
         android:textColor="#888888"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
