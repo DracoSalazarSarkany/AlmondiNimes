@@ -79,6 +79,8 @@ class Fragment_MisListas : Fragment(R.layout.layout_lista_obras_usuario) {
 
     private fun mostrarDialogoEditarItem(obra: ObraGuardada) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_item, null)
+        
+        // Usamos un tema oscuro para el diálogo para que los Spinners se vean bien
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
         builder.setView(dialogView).create().apply {
             val tvObraName = dialogView.findViewById<TextView>(R.id.tv_edit_obra_name)
@@ -89,14 +91,26 @@ class Fragment_MisListas : Fragment(R.layout.layout_lista_obras_usuario) {
             val scores = listOf("Sin puntuar") + (1..10).map { it.toString() }
             val statuses = listOf("Viendo", "Completado", "Pendiente", "Dropeado")
 
-            spScore.adapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, scores)
-            spStatus.adapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, statuses)
+            // Forzamos el layout simple_spinner_item que hereda el estilo del diálogo
+            val scoreAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, scores)
+            scoreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spScore.adapter = scoreAdapter
 
-            spScore.setSelection(if (obra.score == null) 0 else scores.indexOf(obra.score?.toInt().toString()).coerceAtLeast(0))
-            spStatus.setSelection(statuses.indexOf(obra.status).coerceAtLeast(0))
+            val statusAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statuses)
+            statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spStatus.adapter = statusAdapter
+
+            // Posicionar en los valores actuales
+            val currentScoreStr = itemScoreToString(obra.score)
+            val scorePos = scores.indexOf(currentScoreStr).coerceAtLeast(0)
+            spScore.setSelection(scorePos)
+            
+            val statusPos = statuses.indexOf(obra.status).coerceAtLeast(0)
+            spStatus.setSelection(statusPos)
 
             dialogView.findViewById<Button>(R.id.btn_edit_delete).setOnClickListener { 
-                viewModel.eliminarObra(obra); dismiss() 
+                viewModel.eliminarObra(obra)
+                dismiss() 
             }
             dialogView.findViewById<Button>(R.id.btn_edit_save).setOnClickListener {
                 val selectedScoreStr = spScore.selectedItem.toString()
@@ -110,5 +124,11 @@ class Fragment_MisListas : Fragment(R.layout.layout_lista_obras_usuario) {
             window?.setLayout((resources.displayMetrics.widthPixels * 0.90).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
             window?.setBackgroundDrawableResource(android.R.color.transparent)
         }
+    }
+
+    private fun itemScoreToString(score: Double?): String {
+        return score?.let {
+            if (it % 1.0 == 0.0) it.toInt().toString() else it.toString()
+        } ?: "Sin puntuar"
     }
 }

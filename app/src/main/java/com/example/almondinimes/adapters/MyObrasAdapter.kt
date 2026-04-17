@@ -33,7 +33,13 @@ class MyObrasAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
         holder.tvTitle.text = item.title
-        holder.tvScore.text = "⭐ ${item.score ?: "S/P"}"
+        
+        // Formatear nota: si es 10.0 -> 10, si es null -> S/P
+        val scoreText = item.score?.let {
+            if (it % 1.0 == 0.0) it.toInt().toString() else it.toString()
+        } ?: "S/P"
+        
+        holder.tvScore.text = "⭐ $scoreText"
         holder.tvStatus.text = item.status
 
         Glide.with(holder.itemView.context)

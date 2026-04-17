@@ -129,21 +129,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="#FFFFFF" />
+                android:backgroundTint="#FFFFFF"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
             <Spinner
                 android:id="@+id/spinner_month"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
-                android:backgroundTint="#FFFFFF" />
+                android:backgroundTint="#FFFFFF"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark" />
 
             <Spinner
                 android:id="@+id/spinner_year"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="#FFFFFF" />
+                android:backgroundTint="#FFFFFF"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark" />
         </LinearLayout>
 
         <Button
