@@ -2,60 +2,51 @@ package com.example.almondinimes.data
 
 import com.example.almondinimes.models.Usuario
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.random.Random
 
 class AuthManager {
 
     private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
+    private val firestoreManager = FirestoreManager()
 
     /**
-     * Registra un nuevo usuario en Firebase Auth y guarda sus datos en Firestore con un ID autoincremental.
+     * Registra un nuevo usuario en Firebase Auth y crea su perfil en Firestore.
      */
     fun register(email: String, pass: String, nick: String, age: Int, birthDate: String, onResult: (Boolean, String?) -> Unit) {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val uid = task.result?.user?.uid ?: ""
-                    
-                    val counterRef = db.collection("metadata").document("user_counter")
-                    val userRef = db.collection("users").document(uid)
-
-                    // Usamos una transacción para asegurar que el ID sea único y autoincremental
-                    db.runTransaction { transaction ->
-                        val snapshot = transaction.get(counterRef)
-                        val currentCount = snapshot.getLong("count") ?: 0L
-                        val nextCount = currentCount + 1
-                        
-                        // 1. Actualizar el contador global en la DB
-                        transaction.set(counterRef, mapOf("count" to nextCount))
-                        
-                        // 2. Crear el objeto Usuario con el nuevo ID
-                        val nuevoUsuario = Usuario(
-                            uid = uid,
-                            nick = nick,
-                            email = email,
-                            idNumerico = nextCount.toInt(),
-                            age = age,
-                            birthDate = birthDate
-                        )
-                        
-                        // 3. Guardar el documento del usuario
-                        transaction.set(userRef, nuevoUsuario)
-                        
-                        // Retornamos null o cualquier cosa, lo importante es que no lance excepción
-                        null
-                    }.addOnSuccessListener {
-                        onResult(true, null)
-                    }.addOnFailureListener { e ->
-                        onResult(false, "Error al crear perfil: ${e.message}")
-                    }
+                    firestoreManager.createUserProfile(uid, email, nick, age, birthDate, onResult)
                 } else {
                     onResult(false, task.exception?.message)
                 }
             }
+    }
+
+    /**
+     * Escucha los cambios del usuario en tiempo real (Delegado a FirestoreManager).
+     */
+    fun listenToUserData(uid: String, onResult: (Usuario?) -> Unit) {
+        firestoreManager.listenToUserData(uid, onResult)
+    }
+
+    /**
+     * Actualiza los datos del perfil (Delegado a FirestoreManager).
+     */
+    fun updateProfile(nick: String, age: Int, birthDate: String, onResult: (Boolean, String?) -> Unit) {
+        val uid = getCurrentUserUid()
+        if (uid != null) {
+            firestoreManager.updateProfile(uid, nick, age, birthDate, onResult)
+        } else {
+            onResult(false, "No hay sesión activa")
+        }
+    }
+
+    /**
+     * Obtiene los datos del usuario una vez (Delegado a FirestoreManager).
+     */
+    fun getUserData(uid: String, onResult: (Usuario?) -> Unit) {
+        firestoreManager.getUserData(uid, onResult)
     }
 
     /**
@@ -80,63 +71,30 @@ class AuthManager {
     }
 
     /**
-     * Obtiene el UID del usuario actual si está logueado.
+     * Obtiene el UID del usuario actual.
      */
     fun getCurrentUserUid(): String? {
         return auth.currentUser?.uid
     }
 
     /**
-     * Obtiene los datos del usuario (una sola vez) desde Firestore.
+     * Elimina la cuenta de usuario y sus datos.
      */
-    fun getUserData(uid: String, onResult: (Usuario?) -> Unit) {
-        db.collection("users").document(uid).get()
-            .addOnSuccessListener { snapshot ->
-                val usuario = snapshot.toObject(Usuario::class.java)
-                onResult(usuario)
-            }
-            .addOnFailureListener {
-                onResult(null)
-            }
-    }
+    fun deleteAccount(onResult: (Boolean, String?) -> Unit) {
+        val user = auth.currentUser
+        val uid = user?.uid
 
-    /**
-     * Escucha los cambios del usuario en tiempo real.
-     */
-    fun listenToUserData(uid: String, onResult: (Usuario?) -> Unit) {
-        db.collection("users").document(uid)
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    onResult(null)
-                    return@addSnapshotListener
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    val usuario = snapshot.toObject(Usuario::class.java)
-                    onResult(usuario)
-                }
-            }
-    }
-
-    /**
-     * Actualiza los datos del perfil del usuario en Firestore.
-     */
-    fun updateProfile(nick: String, age: Int, birthDate: String, onResult: (Boolean, String?) -> Unit) {
-        val uid = getCurrentUserUid()
         if (uid != null) {
-            val updates = mutableMapOf<String, Any>(
-                "nick" to nick,
-                "age" to age,
-                "birthDate" to birthDate,
-                "fullId" to FieldValue.delete() // Borramos el campo físico para que use el calculado
-            )
-            db.collection("users").document(uid).update(updates)
-                .addOnSuccessListener {
-                    onResult(true, null)
+            firestoreManager.deleteUserData(uid) { success, error ->
+                if (success) {
+                    user.delete().addOnCompleteListener { task ->
+                        if (task.isSuccessful) onResult(true, null)
+                        else onResult(false, task.exception?.message)
+                    }
+                } else {
+                    onResult(false, error)
                 }
-                .addOnFailureListener { e ->
-                    onResult(false, e.message)
-                }
+            }
         } else {
             onResult(false, "No hay sesión activa")
         }

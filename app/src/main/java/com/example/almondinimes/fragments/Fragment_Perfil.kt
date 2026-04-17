@@ -1,10 +1,12 @@
 package com.example.almondinimes.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.almondinimes.R
@@ -52,8 +54,13 @@ class Fragment_Perfil : Fragment(R.layout.fragment_perfil) {
         cargarDatosDeUsuario()
 
         // 3. Observar listas para actualizar estadísticas en tiempo real
-        obrasViewModel.listaAnimes.observe(viewLifecycleOwner) { actualizarEstadisticas() }
-        obrasViewModel.listaMangas.observe(viewLifecycleOwner) { actualizarEstadisticas() }
+        // Observamos ambas listas y actualizamos cuando cualquiera cambie
+        obrasViewModel.listaAnimes.observe(viewLifecycleOwner) { 
+            actualizarEstadisticas() 
+        }
+        obrasViewModel.listaMangas.observe(viewLifecycleOwner) { 
+            actualizarEstadisticas() 
+        }
 
         // 4. Listeners
         btnEditar.setOnClickListener {
@@ -61,8 +68,27 @@ class Fragment_Perfil : Fragment(R.layout.fragment_perfil) {
         }
 
         btnEliminar.setOnClickListener {
-            // Placeholder para lógica de borrado
+            mostrarDialogoConfirmacionBorrado()
         }
+    }
+
+    private fun mostrarDialogoConfirmacionBorrado() {
+        AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+            .setTitle("Eliminar cuenta")
+            .setMessage("¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y perderás todas tus listas.")
+            .setPositiveButton("Eliminar") { _, _ ->
+                authManager.deleteAccount { success, error ->
+                    if (success) {
+                        Toast.makeText(requireContext(), "Cuenta eliminada correctamente", Toast.LENGTH_SHORT).show()
+                        // Navegar de vuelta al login
+                        findNavController().navigate(R.id.loginFragment)
+                    } else {
+                        Toast.makeText(requireContext(), "Error: $error", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     private fun actualizarEstadisticas() {
