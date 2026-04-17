@@ -13,7 +13,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import android.widget.TextView
 import com.example.almondinimes.R
+import com.example.almondinimes.data.AuthManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
@@ -21,6 +23,7 @@ class MainActivity_Principal : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
+    private val authManager = AuthManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,9 @@ class MainActivity_Principal : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar_principal)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
+
+        // Actualizar el nombre en el menú lateral
+        actualizarNombreMenu(navView)
 
         // 2. Configurar NavController usando nav_host_fragment_principal
         val navHostFragment = supportFragmentManager
@@ -91,6 +97,20 @@ class MainActivity_Principal : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun actualizarNombreMenu(navView: NavigationView) {
+        val uid = authManager.getCurrentUserUid()
+        if (uid != null) {
+            // Escuchar cambios en tiempo real
+            authManager.listenToUserData(uid) { usuario ->
+                if (usuario != null) {
+                    val headerView = navView.getHeaderView(0)
+                    val tvUsername = headerView.findViewById<TextView>(R.id.tv_username)
+                    tvUsername.text = usuario.nick
+                }
+            }
+        }
     }
 
     private fun cerrarSesion() {

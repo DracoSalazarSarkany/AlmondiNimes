@@ -2,6 +2,7 @@ package com.example.almondinimes.data
 
 import com.example.almondinimes.models.Usuario
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.random.Random
 
@@ -86,16 +87,58 @@ class AuthManager {
     }
 
     /**
-     * Obtiene los datos del usuario desde Firestore.
+     * Obtiene los datos del usuario (una sola vez) desde Firestore.
      */
     fun getUserData(uid: String, onResult: (Usuario?) -> Unit) {
         db.collection("users").document(uid).get()
-            .addOnSuccessListener { document ->
-                val usuario = document.toObject(Usuario::class.java)
+            .addOnSuccessListener { snapshot ->
+                val usuario = snapshot.toObject(Usuario::class.java)
                 onResult(usuario)
             }
             .addOnFailureListener {
                 onResult(null)
             }
+    }
+
+    /**
+     * Escucha los cambios del usuario en tiempo real.
+     */
+    fun listenToUserData(uid: String, onResult: (Usuario?) -> Unit) {
+        db.collection("users").document(uid)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    onResult(null)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val usuario = snapshot.toObject(Usuario::class.java)
+                    onResult(usuario)
+                }
+            }
+    }
+
+    /**
+     * Actualiza los datos del perfil del usuario en Firestore.
+     */
+    fun updateProfile(nick: String, age: Int, birthDate: String, onResult: (Boolean, String?) -> Unit) {
+        val uid = getCurrentUserUid()
+        if (uid != null) {
+            val updates = mutableMapOf<String, Any>(
+                "nick" to nick,
+                "age" to age,
+                "birthDate" to birthDate,
+                "fullId" to FieldValue.delete() // Borramos el campo físico para que use el calculado
+            )
+            db.collection("users").document(uid).update(updates)
+                .addOnSuccessListener {
+                    onResult(true, null)
+                }
+                .addOnFailureListener { e ->
+                    onResult(false, e.message)
+                }
+        } else {
+            onResult(false, "No hay sesión activa")
+        }
     }
 }

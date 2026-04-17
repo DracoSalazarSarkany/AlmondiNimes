@@ -82,14 +82,14 @@ class Fragment_Perfil : Fragment(R.layout.fragment_perfil) {
     }
 
     /**
-     * FUNCIÓN CLAVE: Ahora carga datos reales desde Firestore.
+     * FUNCIÓN CLAVE: Ahora carga datos reales desde Firestore en tiempo real.
      */
     private fun cargarDatosDeUsuario() {
         val uid = authManager.getCurrentUserUid()
         if (uid != null) {
-            authManager.getUserData(uid) { usuario ->
+            authManager.listenToUserData(uid) { usuario ->
                 if (usuario != null) {
-                    // Asignación a la UI con datos reales
+                    // Asignación a la UI con datos reales (fullId se calcula solo)
                     tvUserId.text = usuario.fullId
                     tvNombre.text = usuario.nick
                     tvEmail.text = usuario.email
