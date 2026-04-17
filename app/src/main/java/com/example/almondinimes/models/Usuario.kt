@@ -7,6 +7,7 @@ data class Usuario(
     val idNumerico: Int = 0,
     val fotoUrl: String? = null,
     val age: Int = 0,
+    val birthDate: String = "",
     var isSelected: Boolean = false
 ) {
     // Propiedad para obtener el formato Nick#00001 automáticamente

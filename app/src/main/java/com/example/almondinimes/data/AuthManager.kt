@@ -11,32 +11,46 @@ class AuthManager {
     private val db = FirebaseFirestore.getInstance()
 
     /**
-     * Registra un nuevo usuario en Firebase Auth y guarda sus datos en Firestore.
+     * Registra un nuevo usuario en Firebase Auth y guarda sus datos en Firestore con un ID autoincremental.
      */
-    fun register(email: String, pass: String, nick: String, age: Int, onResult: (Boolean, String?) -> Unit) {
+    fun register(email: String, pass: String, nick: String, age: Int, birthDate: String, onResult: (Boolean, String?) -> Unit) {
         auth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val uid = task.result?.user?.uid ?: ""
-                    // Generamos un ID numérico aleatorio (como el que tenías en el modelo)
-                    val idNumerico = Random.nextInt(1, 99999)
                     
-                    val nuevoUsuario = Usuario(
-                        uid = uid,
-                        nick = nick,
-                        email = email,
-                        idNumerico = idNumerico,
-                        age = age
-                    )
+                    val counterRef = db.collection("metadata").document("user_counter")
+                    val userRef = db.collection("users").document(uid)
 
-                    // Guardamos en Firestore
-                    db.collection("users").document(uid).set(nuevoUsuario)
-                        .addOnSuccessListener {
-                            onResult(true, null)
-                        }
-                        .addOnFailureListener { e ->
-                            onResult(false, e.message)
-                        }
+                    // Usamos una transacción para asegurar que el ID sea único y autoincremental
+                    db.runTransaction { transaction ->
+                        val snapshot = transaction.get(counterRef)
+                        val currentCount = snapshot.getLong("count") ?: 0L
+                        val nextCount = currentCount + 1
+                        
+                        // 1. Actualizar el contador global en la DB
+                        transaction.set(counterRef, mapOf("count" to nextCount))
+                        
+                        // 2. Crear el objeto Usuario con el nuevo ID
+                        val nuevoUsuario = Usuario(
+                            uid = uid,
+                            nick = nick,
+                            email = email,
+                            idNumerico = nextCount.toInt(),
+                            age = age,
+                            birthDate = birthDate
+                        )
+                        
+                        // 3. Guardar el documento del usuario
+                        transaction.set(userRef, nuevoUsuario)
+                        
+                        // Retornamos null o cualquier cosa, lo importante es que no lance excepción
+                        null
+                    }.addOnSuccessListener {
+                        onResult(true, null)
+                    }.addOnFailureListener { e ->
+                        onResult(false, "Error al crear perfil: ${e.message}")
+                    }
                 } else {
                     onResult(false, task.exception?.message)
                 }

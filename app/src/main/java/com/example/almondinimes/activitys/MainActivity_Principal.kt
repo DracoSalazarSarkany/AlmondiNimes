@@ -109,6 +109,4 @@ class MainActivity_Principal : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-
 }

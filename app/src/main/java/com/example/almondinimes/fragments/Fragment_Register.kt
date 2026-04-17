@@ -61,9 +61,10 @@ class Fragment_Register : Fragment(R.layout.fragment_register) {
             val year = spYear.selectedItem.toString().toInt()
 
             val age = calculateAge(day, month, year)
+            val birthDate = String.format("%02d/%02d/%04d", day, month + 1, year)
 
             // Llamada a Firebase para registrar
-            authManager.register(email, pass, user, age) { success, error ->
+            authManager.register(email, pass, user, age, birthDate) { success, error ->
                 if (success) {
                     authManager.logout() // Cerramos la sesión automática tras el registro
                     Toast.makeText(requireContext(), "Registro exitoso. Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show()

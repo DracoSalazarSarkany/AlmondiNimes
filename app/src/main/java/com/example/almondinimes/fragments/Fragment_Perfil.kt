@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.almondinimes.R
 import androidx.fragment.app.activityViewModels
+import com.example.almondinimes.data.AuthManager
 import com.example.almondinimes.viewmodels.ObrasViewModel
 
 class Fragment_Perfil : Fragment(R.layout.fragment_perfil) {
 
     private val obrasViewModel: ObrasViewModel by activityViewModels()
+    private val authManager = AuthManager()
 
     // Referencias de UI
     private lateinit var tvUserId: TextView
@@ -80,25 +82,21 @@ class Fragment_Perfil : Fragment(R.layout.fragment_perfil) {
     }
 
     /**
-     * FUNCIÓN CLAVE: Ahora usa datos hardcodeados,
-     * pero está lista para recibir el repositorio de datos real.
+     * FUNCIÓN CLAVE: Ahora carga datos reales desde Firestore.
      */
     private fun cargarDatosDeUsuario() {
-        // Estos datos vendrán del futuro Repositorio/DB
-        val nickUsuario = "Gemini"
-        val idNumerico = 42 // Este será el valor autoincremental de la DB
-
-        val emailEjemplo = "usuario@almondinimes.com"
-        val fechaEjemplo = "15/05/1998"
-
-        // Formateamos el ID para que siempre tenga 5 cifras: Nick#00042
-        val idFormateado = String.format("%s#%05d", nickUsuario, idNumerico)
-
-        // Asignación a la UI
-        tvUserId.text = idFormateado
-        tvNombre.text = nickUsuario
-        tvEmail.text = emailEjemplo
-        tvFechaNacimiento.text = fechaEjemplo
+        val uid = authManager.getCurrentUserUid()
+        if (uid != null) {
+            authManager.getUserData(uid) { usuario ->
+                if (usuario != null) {
+                    // Asignación a la UI con datos reales
+                    tvUserId.text = usuario.fullId
+                    tvNombre.text = usuario.nick
+                    tvEmail.text = usuario.email
+                    tvFechaNacimiento.text = usuario.birthDate
+                }
+            }
+        }
     }
 
 }
