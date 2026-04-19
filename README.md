@@ -1,22 +1,22 @@
 # AlmondiNimes 🌙
 
-AlmondiNimes es una aplicación Android moderna diseñada para que los entusiastas del anime y manga puedan gestionar sus listas, descubrir novedades y conectar con amigos. El proyecto está enfocado en el rendimiento, la escalabilidad y una experiencia de usuario fluida con un diseño oscuro elegante.
+AlmondiNimes es una aplicación Android moderna diseñada para que los entusiastas del anime y manga puedan gestionar sus listas, descubrir novedades y conectar con amigos. El proyecto utiliza una arquitectura robusta basada en MVVM y aprovecha el ecosistema de Firebase y la API de Jikan.
 
 ## 🚀 Tecnologías y Arquitectura
 
 - **Arquitectura:** MVVM (Model-View-ViewModel).
-- **Concurrencia:** Kotlin Coroutines para operaciones asíncronas y de red.
-- **Red:** Retrofit con caché de 10MB e interceptor para soporte offline.
-- **UI:** 
-    - `DiffUtil` en todos los adaptadores para actualizaciones eficientes.
-    - Fragmentos unificados para reducir redundancia.
-    - Scroll infinito centralizado.
-- **Navegación:** Jetpack Navigation Component con gestión centralizada en `NavegacionUtil`.
-- **API:** Integración con Jikan API (MyAnimeList).
+- **Lenguaje:** Kotlin con Coroutines para operaciones asíncronas.
+- **Base de Datos y Auth:** Firebase Authentication y Cloud Firestore.
+- **Red:** Retrofit para el consumo de la API de Jikan (MyAnimeList).
+- **UI/UX:** 
+    - Diseño Oscuro (Dark Theme) coherente.
+    - Jetpack Navigation para un flujo de pantallas fluido.
+    - Componentes personalizados (Spinners optimizados para modo oscuro).
+    - Glide para la carga eficiente de imágenes.
 
 ## 📁 Estructura Completa del Proyecto
 
-A continuación se detalla la estructura exhaustiva de todos los archivos del proyecto:
+A continuación se detalla la organización del proyecto y el propósito de cada archivo:
 
 ```text
 AlmondiNimes/
@@ -25,151 +25,79 @@ AlmondiNimes/
 │   │   ├── main/
 │   │   │   ├── java/com/example/almondinimes/
 │   │   │   │   ├── activitys/
-│   │   │   │   │   ├── MainActivity.kt
-│   │   │   │   │   ├── MainActivity_Principal.kt
-│   │   │   │   │   └── SplashActivity.kt
+│   │   │   │   │   ├── MainActivity.kt              # Flujo de autenticación (Login/Registro).
+│   │   │   │   │   ├── MainActivity_Principal.kt    # Núcleo de la app (Drawer, BottomNav, Navegación).
+│   │   │   │   │   └── SplashActivity.kt            # Pantalla de carga y redirección inicial.
 │   │   │   │   ├── adapters/
-│   │   │   │   │   ├── AmigosAdapter.kt
-│   │   │   │   │   ├── BusquedaAmigosAdapter.kt
-│   │   │   │   │   ├── MyObrasAdapter.kt
-│   │   │   │   │   ├── NotificacionesAdapter.kt
-│   │   │   │   │   ├── NovedadesAdapter.kt
-│   │   │   │   │   └── ObrasBusquedaAdapter.kt
+│   │   │   │   │   ├── AmigosAdapter.kt             # Renderizado de listas de usuarios.
+│   │   │   │   │   ├── BusquedaAmigosAdapter.kt     # Especializado en resultados de búsqueda.
+│   │   │   │   │   ├── MyObrasAdapter.kt            # Adaptador principal para Anime/Manga.
+│   │   │   │   │   ├── NotificacionesAdapter.kt     # Gestión visual del sistema de avisos.
+│   │   │   │   │   ├── NovedadesAdapter.kt          # Adaptador de noticias de la industria.
+│   │   │   │   │   └── ObrasBusquedaAdapter.kt      # Resultados de búsqueda global de la API.
 │   │   │   │   ├── fragments/
-│   │   │   │   │   ├── Fragment_AboutUs.kt
-│   │   │   │   │   ├── Fragment_Advertencias.kt
-│   │   │   │   │   ├── Fragment_Amigos.kt
-│   │   │   │   │   ├── Fragment_Amigos_De_Amigo.kt
-│   │   │   │   │   ├── Fragment_Anime.kt
-│   │   │   │   │   ├── Fragment_Ayuda.kt
-│   │   │   │   │   ├── Fragment_Comunidad.kt
-│   │   │   │   │   ├── Fragment_Detalle_Obra.kt
-│   │   │   │   │   ├── Fragment_Editar_Perfil.kt
-│   │   │   │   │   ├── Fragment_FAQ.kt
-│   │   │   │   │   ├── Fragment_Lista_Amigo.kt
-│   │   │   │   │   ├── Fragment_Login.kt
-│   │   │   │   │   ├── Fragment_Manga.kt
-│   │   │   │   │   ├── Fragment_MisListas.kt
-│   │   │   │   │   ├── Fragment_Novedades.kt
-│   │   │   │   │   ├── Fragment_Perfil.kt
-│   │   │   │   │   ├── Fragment_Perfil_Amigo.kt
-│   │   │   │   │   ├── Fragment_Register.kt
-│   │   │   │   │   └── NavegacionUtil.kt
+│   │   │   │   │   ├── Fragment_AboutUs.kt          # Información sobre el proyecto.
+│   │   │   │   │   ├── Fragment_Advertencias.kt     # Avisos legales y de uso.
+│   │   │   │   │   ├── Fragment_Amigos.kt           # Lista de amigos y buscador dinámico (Nick/ID).
+│   │   │   │   │   ├── Fragment_Amigos_De_Amigo.kt  # Exploración de la red social de contactos.
+│   │   │   │   │   ├── Fragment_Anime.kt            # Buscador global de Anime.
+│   │   │   │   │   ├── Fragment_Ayuda.kt            # Soporte técnico y guías.
+│   │   │   │   │   ├── Fragment_Comunidad.kt        # Espacio de interacción social.
+│   │   │   │   │   ├── Fragment_Detalle_Obra.kt     # Ficha técnica de Jikan y añadir a lista.
+│   │   │   │   │   ├── Fragment_Editar_Perfil.kt    # Modificación de datos personales.
+│   │   │   │   │   ├── Fragment_FAQ.kt              # Preguntas frecuentes.
+│   │   │   │   │   ├── Fragment_Lista_Amigo.kt      # Colección de un amigo (Modo lectura).
+│   │   │   │   │   ├── Fragment_Login.kt            # Gestión de acceso y seguridad de sesión.
+│   │   │   │   │   ├── Fragment_Manga.kt            # Buscador global de Manga.
+│   │   │   │   │   ├── Fragment_MisListas.kt        # Gestión de colección personal (CRUD).
+│   │   │   │   │   ├── Fragment_Novedades.kt        # Feed de noticias de la industria.
+│   │   │   │   │   ├── Fragment_Perfil.kt           # Vista de perfil del usuario actual.
+│   │   │   │   │   ├── Fragment_Perfil_Amigo.kt     # Ficha pública de otros usuarios.
+│   │   │   │   │   ├── Fragment_Register.kt         # Registro de nuevos usuarios y perfiles.
+│   │   │   │   │   └── NavegacionUtil.kt            # Funciones auxiliares de navegación.
 │   │   │   │   ├── models/
-│   │   │   │   │   ├── Aired.kt
-│   │   │   │   │   ├── Anime.kt
-│   │   │   │   │   ├── Genre.kt
-│   │   │   │   │   ├── JikanFullResponse.kt
-│   │   │   │   │   ├── JikanImages.kt
-│   │   │   │   │   ├── JikanJpg.kt
-│   │   │   │   │   ├── JikanResponse.kt
-│   │   │   │   │   ├── NewsImages.kt
-│   │   │   │   │   ├── NewsJpg.kt
-│   │   │   │   │   ├── Noticia.kt
-│   │   │   │   │   ├── Notificacion.kt
-│   │   │   │   │   ├── ObraGuardada.kt
-│   │   │   │   │   ├── TipoNotificacion.kt
-│   │   │   │   │   └── Usuario.kt
+│   │   │   │   │   ├── Usuario.kt                   # Perfil de usuario en Firestore.
+│   │   │   │   │   ├── ObraGuardada.kt              # Datos de obras persistidas.
+│   │   │   │   │   ├── Notificacion.kt              # Modelo para avisos internos.
+│   │   │   │   │   └── (Data Classes API)           # Anime, Genre, JikanResponse, Noticia, etc.
 │   │   │   │   ├── network/
-│   │   │   │   │   ├── JikanApiService.kt
-│   │   │   │   │   └── RetrofitClient.kt
+│   │   │   │   │   ├── JikanApiService.kt           # Endpoints de la API Jikan.
+│   │   │   │   │   └── RetrofitClient.kt            # Configuración de red y Retrofit.
 │   │   │   │   ├── utils/
-│   │   │   │   │   └── EndlessScrollListener.kt
+│   │   │   │   │   └── EndlessScrollListener.kt     # Paginación automática para listas.
 │   │   │   │   ├── viewmodels/
-│   │   │   │   │   ├── AmigosViewModel.kt
-│   │   │   │   │   ├── NotificacionesViewModel.kt
-│   │   │   │   │   └── ObrasViewModel.kt
-│   │   │   │   └── AlmondiApplication.kt
+│   │   │   │   │   ├── AmigosViewModel.kt           # Lógica social y búsquedas en Firestore.
+│   │   │   │   │   ├── NotificacionesViewModel.kt   # Lógica del sistema de notificaciones.
+│   │   │   │   │   └── ObrasViewModel.kt            # Gestión de la base de datos de obras.
+│   │   │   │   └── AlmondiApplication.kt            # Clase de aplicación principal.
 │   │   │   ├── res/
-│   │   │   │   ├── color/
-│   │   │   │   │   └── bottom_nav_colors.xml
-│   │   │   │   ├── drawable/
-│   │   │   │   │   ├── bg_floating_dark.xml
-│   │   │   │   │   ├── bg_main_gradient.xml
-│   │   │   │   │   ├── bg_toolbar_floating.xml
-│   │   │   │   │   ├── bg_unread_dot.xml
-│   │   │   │   │   ├── gradient_black_to_transparent.xml
-│   │   │   │   │   ├── ic_almondinimes_background.xml
-│   │   │   │   │   ├── ic_launcher_background.xml
-│   │   │   │   │   ├── ic_launcher_foreground.xml
-│   │   │   │   │   ├── ic_menu_vector.xml
-│   │   │   │   │   └── splash_icon_wrapper.xml
+│   │   │   │   ├── color/                           # Estados de color para BottomNav.
+│   │   │   │   ├── drawable/                        # Recursos gráficos y backgrounds.
 │   │   │   │   ├── layout/
-│   │   │   │   │   ├── activity_main.xml
-│   │   │   │   │   ├── activity_main_principal.xml
-│   │   │   │   │   ├── activity_splash.xml
-│   │   │   │   │   ├── dialog_add_friend.xml
-│   │   │   │   │   ├── dialog_edit_item.xml
-│   │   │   │   │   ├── fragment_about_us.xml
-│   │   │   │   │   ├── fragment_advertencias.xml
-│   │   │   │   │   ├── fragment_amigos.xml
-│   │   │   │   │   ├── fragment_anime.xml
-│   │   │   │   │   ├── fragment_ayuda.xml
-│   │   │   │   │   ├── fragment_comunidad.xml
-│   │   │   │   │   ├── fragment_detalle_obra.xml
-│   │   │   │   │   ├── fragment_editar_perfil.xml
-│   │   │   │   │   ├── fragment_friend_item_list.xml
-│   │   │   │   │   ├── fragment_f_a_q.xml
-│   │   │   │   │   ├── fragment_login.xml
-│   │   │   │   │   ├── fragment_manga.xml
-│   │   │   │   │   ├── fragment_novedades.xml
-│   │   │   │   │   ├── fragment_perfil.xml
-│   │   │   │   │   ├── fragment_perfil_amigo.xml
-│   │   │   │   │   ├── fragment_register.xml
-│   │   │   │   │   ├── item_advertencias.xml
-│   │   │   │   │   ├── item_amigo.xml
-│   │   │   │   │   ├── item_anime_manga.xml
-│   │   │   │   │   ├── item_foro.xml
-│   │   │   │   │   ├── item_friend_search_result.xml
-│   │   │   │   │   ├── item_noticias.xml
-│   │   │   │   │   ├── item_notificacion.xml
-│   │   │   │   │   ├── item_obra.xml
-│   │   │   │   │   ├── layout_empty_state.xml
-│   │   │   │   │   ├── layout_lista_obras_usuario.xml
-│   │   │   │   │   ├── nav_header_principal.xml
-│   │   │   │   │   └── spinner_item_layout.xml
-│   │   │   │   ├── menu/
-│   │   │   │   │   ├── bottom_nav_menu.xml
-│   │   │   │   │   └── drawer_menu.xml
-│   │   │   │   ├── mipmap-*/ (Iconos de la aplicación)
-│   │   │   │   ├── navigation/
-│   │   │   │   │   ├── nav_graph_login.xml
-│   │   │   │   │   └── nav_graph_principal.xml
-│   │   │   │   ├── values/
-│   │   │   │   │   ├── colors.xml
-│   │   │   │   │   ├── strings.xml
-│   │   │   │   │   └── themes.xml
-│   │   │   │   ├── values-night/
-│   │   │   │   │   └── themes.xml
-│   │   │   │   └── xml/
-│   │   │   │       ├── backup_rules.xml
-│   │   │   │       └── data_extraction_rules.xml
-│   │   │   └── AndroidManifest.xml
-│   │   ├── androidTest/java/com/example/almondinimes/ExampleInstrumentedTest.kt
-│   │   └── test/java/com/example/almondinimes/ExampleUnitTest.kt
-│   ├── build.gradle.kts
-│   ├── proguard-rules.pro
+│   │   │   │   │   ├── activity_*.xml               # Layouts de actividades.
+│   │   │   │   │   ├── fragment_*.xml               # Layouts de pantallas.
+│   │   │   │   │   ├── item_*.xml                   # Diseños de fila para listas.
+│   │   │   │   │   ├── dialog_*.xml                 # Ventanas emergentes de acción.
+│   │   │   │   │   ├── spinner_item_layout.xml      # Layout para Spinner (Modo Oscuro).
+│   │   │   │   │   └── layout_empty_state.xml       # Estado vacío para listas.
+│   │   │   │   ├── menu/                            # Configuración de menús de navegación.
+│   │   │   │   ├── navigation/                      # Grafos de navegación (Login/Principal).
+│   │   │   │   └── values/                          # Strings, colores y temas (Light/Night).
+│   │   │   └── AndroidManifest.xml                  # Manifiesto del sistema.
+│   │   ├── androidTest/                             # Tests instrumentados.
+│   │   └── test/                                    # Tests unitarios.
+│   ├── build.gradle.kts                             # Build script del módulo app.
 │   └── .gitignore
-├── gradle/wrapper/
-│   ├── gradle-wrapper.jar
-│   └── gradle-wrapper.properties
-├── build.gradle.kts
-├── settings.gradle.kts
-├── gradle.properties
-├── gradlew
-├── gradlew.bat
-└── local.properties
+├── build.gradle.kts                                 # Build script del proyecto.
+├── settings.gradle.kts                              # Configuración de módulos.
+└── ...
 ```
 
-## 🛠️ Próximos Pasos
+## 🛠️ Detalles de Implementación Destacados
 
-1. **Integración con Firebase:**
-    - Implementar Firebase Authentication para el registro seguro de usuarios.
-    - Migrar los ViewModels para persistir datos en Cloud Firestore.
-2. **Optimización de Perfil:**
-    - Permitir la edición de la imagen de perfil y sincronización en tiempo real.
-3. **Mejoras en Comunidad:**
-    - Implementar sistema de chat o comentarios en obras.
+- **Seguridad y Persistencia:** Lógica en `Fragment_Login` para validar la sesión de Firebase contra las preferencias del usuario ("Recordar"), forzando el cierre de sesión si es necesario para mayor privacidad.
+- **Búsqueda Multi-Filtro:** `AmigosViewModel` permite localizar usuarios mediante Nick (prefijo), ID numérico directo (#ID) o el tag completo (Nick#ID).
+- **UI Adaptativa:** Uso de layouts personalizados para Spinners para garantizar que el texto sea blanco y legible en el tema oscuro de la aplicación.
 
 ---
 © 2026 Lucas Ruiz

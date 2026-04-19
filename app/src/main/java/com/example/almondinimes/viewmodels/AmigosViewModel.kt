@@ -33,29 +33,60 @@ class AmigosViewModel : ViewModel() {
     }
 
     /**
-     * Busca un usuario por su tag completo (ej: Nick#00001)
+     * Busca usuarios de forma dinámica por Nick (empieza por) o por Tag completo (Nick#0000)
      */
-    fun buscarUsuarioPorTag(tag: String) {
-        if (!tag.contains("#")) {
+    fun buscarUsuarios(query: String) {
+        val currentUid = auth.currentUser?.uid
+        if (query.isEmpty()) {
             _resultadosBusqueda.value = emptyList()
             return
         }
 
-        val partes = tag.split("#")
-        val nickBusqueda = partes[0]
-        val idNumBusqueda = partes[1].toIntOrNull() ?: 0
+        val collection = db.collection("users")
 
-        db.collection("users")
-            .whereEqualTo("nick", nickBusqueda)
-            .whereEqualTo("idNumerico", idNumBusqueda)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                val usuarios = snapshot.toObjects(Usuario::class.java)
-                _resultadosBusqueda.value = usuarios
-            }
-            .addOnFailureListener {
+        if (query.startsWith("#")) {
+            // Caso 1: Búsqueda SOLO por ID (Ej: #00001)
+            val idStr = query.removePrefix("#")
+            val idNumBusqueda = idStr.toIntOrNull() ?: -1
+            
+            if (idNumBusqueda == -1) {
                 _resultadosBusqueda.value = emptyList()
+                return
             }
+
+            collection.whereEqualTo("idNumerico", idNumBusqueda)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    _resultadosBusqueda.value = snapshot.toObjects(Usuario::class.java).filter { it.uid != currentUid }
+                }
+
+        } else if (query.contains("#")) {
+            // Caso 2: Búsqueda por TAG completo (Ej: Nick#00001)
+            val partes = query.split("#")
+            val nickBusqueda = partes[0]
+            val idNumBusqueda = partes[1].toIntOrNull() ?: -1
+
+            collection
+                .whereEqualTo("nick", nickBusqueda)
+                .whereEqualTo("idNumerico", idNumBusqueda)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    _resultadosBusqueda.value = snapshot.toObjects(Usuario::class.java).filter { it.uid != currentUid }
+                }
+        } else {
+            // Caso 3: Búsqueda por NICK (prefijo)
+            if (query.length < 3) return // Evitar búsquedas demasiado amplias
+
+            collection
+                .orderBy("nick")
+                .startAt(query)
+                .endAt(query + "\uf8ff")
+                .limit(10)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    _resultadosBusqueda.value = snapshot.toObjects(Usuario::class.java).filter { it.uid != currentUid }
+                }
+        }
     }
 
     fun añadirAmigos(nuevos: Set<Usuario>) {
@@ -85,9 +116,9 @@ class AmigosViewModel : ViewModel() {
             .addOnSuccessListener { snapshot ->
                 val uid = snapshot.documents.firstOrNull()?.id
                 if (uid != null) {
-                    // Filtramos por tipo (ANIME/MANGA) en su subcolección
+                    // Filtramos por tipo (ANIME/MANGA) en su subcolección usando el campo 'type'
                     db.collection("users").document(uid).collection("obras_usuario")
-                        .whereEqualTo("tipo", tipo)
+                        .whereEqualTo("type", tipo)
                         .get()
                         .addOnSuccessListener { obrasSnapshot ->
                             _obrasDeOtro.value = obrasSnapshot.toObjects(ObraGuardada::class.java)

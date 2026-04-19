@@ -110,23 +110,23 @@ class Fragment_Editar_Perfil : Fragment(R.layout.fragment_editar_perfil) {
 
         // Días (1 al 31)
         val days = (1..31).map { it.toString() }
-        spDay.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, days).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+        val dayAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, days)
+        dayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout)
+        spDay.adapter = dayAdapter
 
         // Meses
         val months = listOf("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
-        spMonth.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+        val monthAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, months)
+        monthAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout)
+        spMonth.adapter = monthAdapter
 
         // Años (Desde hoy hacia atrás 100 años)
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val years = (currentYear downTo 1950).map { it.toString() }
-        spYear.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+        val yearAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, years)
+        yearAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout)
+        spYear.adapter = yearAdapter
     }
 
     private fun calculateAge(day: Int, month: Int, year: Int): Int {

@@ -50,6 +50,7 @@ class Fragment_MisListas : Fragment(R.layout.layout_lista_obras_usuario) {
 
         val sortOptions = listOf("Título A-Z", "Título Z-A", "Nota (Máx)", "Nota (Min)")
         val sortAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, sortOptions)
+        sortAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout)
         spSort.adapter = sortAdapter
 
         val liveData = if (tipoObra == "ANIME") viewModel.listaAnimes else viewModel.listaMangas
@@ -99,13 +100,13 @@ class Fragment_MisListas : Fragment(R.layout.layout_lista_obras_usuario) {
             val scores = listOf("Sin puntuar") + (1..10).map { it.toString() }
             val statuses = listOf("Viendo", "Completado", "Pendiente", "Dropeado")
 
-            // Forzamos el layout simple_spinner_item que hereda el estilo del diálogo
-            val scoreAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, scores)
-            scoreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Usamos nuestros layouts personalizados para asegurar visibilidad en modo oscuro
+            val scoreAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, scores)
+            scoreAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout)
             spScore.adapter = scoreAdapter
 
-            val statusAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, statuses)
-            statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val statusAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item_layout, statuses)
+            statusAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout)
             spStatus.adapter = statusAdapter
 
             // Posicionar en los valores actuales

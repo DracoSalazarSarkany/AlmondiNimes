@@ -37,12 +37,19 @@ class Fragment_Login : Fragment(R.layout.fragment_login) {
             cbRemember.isChecked = true
         }
 
-        // Comprobar si ya hay una sesión iniciada en Firebase
+        // Comprobar si ya hay una sesión iniciada en Firebase Y si el usuario marcó "Recordar"
         val currentUserUid = authManager.getCurrentUserUid()
         if (currentUserUid != null) {
-            val intent = Intent(requireContext(), MainActivity_Principal::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            if (isRemembered) {
+                // El usuario quiere ser recordado, entramos directamente
+                val intent = Intent(requireContext(), MainActivity_Principal::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            } else {
+                // El usuario NO marcó recordar, pero Firebase mantiene la sesión.
+                // Forzamos el cierre de sesión para seguridad.
+                com.google.firebase.auth.FirebaseAuth.getInstance().signOut()
+            }
         }
 
         // Acción: Ir al fragmento de Registro

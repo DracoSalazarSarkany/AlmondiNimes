@@ -88,8 +88,12 @@ class Fragment_Amigos : Fragment(R.layout.fragment_amigos) {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString().trim()
-                if (query.contains("#")) {
-                    viewModel.buscarUsuarioPorTag(query)
+                // Buscamos si hay al menos 3 caracteres (o si contiene # para búsqueda por ID)
+                if (query.length >= 3 || query.contains("#")) {
+                    viewModel.buscarUsuarios(query)
+                } else if (query.isEmpty()) {
+                    // Limpiar resultados si borra el texto
+                    viewModel.buscarUsuarios("")
                 }
             }
             override fun afterTextChanged(s: Editable?) {}
