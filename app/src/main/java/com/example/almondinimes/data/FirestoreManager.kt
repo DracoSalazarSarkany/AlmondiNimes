@@ -84,11 +84,39 @@ class FirestoreManager {
     }
 
     /**
-     * Borra el documento del usuario.
+     * Borra el perfil del usuario y todos sus datos (obras y amigos) de forma recursiva.
      */
     fun deleteUserData(uid: String, onResult: (Boolean, String?) -> Unit) {
-        db.collection("users").document(uid).delete()
-            .addOnSuccessListener { onResult(true, null) }
-            .addOnFailureListener { e -> onResult(false, e.message) }
+        val userRef = db.collection("users").document(uid)
+        
+        // 1. Obtener las subcolecciones (necesitamos borrar documento a documento)
+        val obrasRef = userRef.collection("obras_usuario")
+        val amigosRef = userRef.collection("amigos")
+
+        obrasRef.get().addOnSuccessListener { obrasSnapshot ->
+            amigosRef.get().addOnSuccessListener { amigosSnapshot ->
+                
+                val batch = db.batch()
+
+                // Añadir borrado de obras al batch
+                for (doc in obrasSnapshot.documents) {
+                    batch.delete(doc.reference)
+                }
+
+                // Añadir borrado de amigos al batch
+                for (doc in amigosSnapshot.documents) {
+                    batch.delete(doc.reference)
+                }
+
+                // Finalmente borrar el documento del perfil
+                batch.delete(userRef)
+
+                // Ejecutar todo el borrado de golpe
+                batch.commit()
+                    .addOnSuccessListener { onResult(true, null) }
+                    .addOnFailureListener { e -> onResult(false, e.message) }
+
+            }.addOnFailureListener { e -> onResult(false, "Error al acceder a amigos: ${e.message}") }
+        }.addOnFailureListener { e -> onResult(false, "Error al acceder a obras: ${e.message}") }
     }
 }
